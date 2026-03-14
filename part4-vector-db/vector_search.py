@@ -1,15 +1,15 @@
 """
 Part 4 — Vector Database Demonstration
 
-This script demonstrates how vector embeddings can be used
-to perform similarity search on retail product data.
+This example simulates how vector databases perform similarity search
+using vector embeddings.
 """
 
 import numpy as np
 
 
 # --------------------------------------------------
-# Example Product Embeddings
+# Example Product Data
 # --------------------------------------------------
 
 products = [
@@ -19,7 +19,11 @@ products = [
     "Smartwatch"
 ]
 
-# Simulated vector embeddings
+
+# --------------------------------------------------
+# Simulated Vector Embeddings
+# --------------------------------------------------
+
 embeddings = np.array([
     [0.9, 0.1, 0.2],
     [0.85, 0.15, 0.3],
