@@ -96,75 +96,79 @@ These technologies represent key components of modern data engineering and analy
 
 The system follows a modern multi-layer data architecture where different storage technologies handle different workloads.
 
-&#x20;     +---------------------+
-
-&#x20;     |     Raw Datasets    |
-
-&#x20;     | (CSV / JSON / Parquet)
-
-&#x20;     +----------+----------+
-
-&#x20;                |
-
-&#x20;                v
-
-&#x20;     +---------------------+
-
-&#x20;     | Relational Database |
-
-&#x20;     |        (SQL)        |
-
-&#x20;     +----------+----------+
-
-&#x20;                |
-
-&#x20;                v
-
-&#x20;     +---------------------+
-
-&#x20;     |   NoSQL Database    |
-
-&#x20;     |      (MongoDB)      |
-
-&#x20;     +----------+----------+
-
-&#x20;                |
-
-&#x20;                v
-
-&#x20;     +---------------------+
-
-&#x20;     |    Data Warehouse   |
-
-&#x20;     |    (Star Schema)    |
-
-&#x20;     +----------+----------+
-
-&#x20;                |
-
-&#x20;                v
-
-&#x20;     +---------------------+
-
-&#x20;     |   Vector Database   |
-
-&#x20;     |  (Similarity Search)|
-
-&#x20;     +----------+----------+
-
-&#x20;                |
-
-&#x20;                v
-
-&#x20;     +---------------------+
-
-&#x20;     |       Data Lake     |
-
-&#x20;     |   Large Scale Data  |
-
-&#x20;     +---------------------+
 
 
+```
+
++---------------------+
+
+| Raw Datasets        |
+
+| (CSV / JSON / Parquet)
+
++----------+----------+
+
+&#x20;          |
+
+&#x20;          v
+
++---------------------+
+
+| Relational Database |
+
+| (SQL)               |
+
++----------+----------+
+
+&#x20;          |
+
+&#x20;          v
+
++---------------------+
+
+| NoSQL Database      |
+
+| (MongoDB)           |
+
++----------+----------+
+
+&#x20;          |
+
+&#x20;          v
+
++---------------------+
+
+| Data Warehouse      |
+
+| (Star Schema)       |
+
++----------+----------+
+
+&#x20;          |
+
+&#x20;          v
+
++---------------------+
+
+| Vector Database     |
+
+| (Similarity Search) |
+
++----------+----------+
+
+&#x20;          |
+
+&#x20;          v
+
++---------------------+
+
+| Data Lake           |
+
+| Large Scale Data    |
+
++---------------------+
+
+```
 
 \---
 
