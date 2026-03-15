@@ -64,11 +64,7 @@ The following data technologies and concepts were implemented in this project:
 
 These technologies represent key components of modern data engineering and analytics platforms.
 
-
-
-## System Architecture
-
-The system follows a modern multi-layer data architecture where different storage technologies handle different workloads.
+---
 
 ## System Architecture
 
