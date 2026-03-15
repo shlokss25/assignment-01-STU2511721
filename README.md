@@ -2,6 +2,20 @@
 
 
 
+!\[Python](https://img.shields.io/badge/Python-Data%20Processing-blue)
+
+!\[SQL](https://img.shields.io/badge/SQL-Database-green)
+
+!\[MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen)
+
+!\[Data Warehouse](https://img.shields.io/badge/Data-Warehouse-orange)
+
+!\[Vector DB](https://img.shields.io/badge/Vector-Database-purple)
+
+!\[Data Lake](https://img.shields.io/badge/Data-Lake-blueviolet)
+
+
+
 \## Project Overview
 
 
@@ -141,6 +155,4 @@ This project demonstrates how multiple data management technologies can be integ
 
 
 The implementation of these technologies provides practical insight into modern data engineering workflows and data-driven system design.
-
-
 
