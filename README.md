@@ -4,37 +4,17 @@
 
 
 
+![Python](https://img.shields.io/badge/Python-Data%20Processing-blue)
 
+![SQL](https://img.shields.io/badge/SQL-Database-green)
 
+![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen)
 
+![Data Warehouse](https://img.shields.io/badge/Data-Warehouse-orange)
 
+![Vector DB](https://img.shields.io/badge/Vector-Database-purple)
 
-
-!\[Python](https://img.shields.io/badge/Python-Data%20Processing-blue)
-
-
-
-!\[SQL](https://img.shields.io/badge/SQL-Database-green)
-
-
-
-!\[MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen)
-
-
-
-!\[Data Warehouse](https://img.shields.io/badge/Data-Warehouse-orange)
-
-
-
-!\[Vector DB](https://img.shields.io/badge/Vector-Database-purple)
-
-
-
-!\[Data Lake](https://img.shields.io/badge/Data-Lake-blueviolet)
-
-
-
-
+![Data Lake](https://img.shields.io/badge/Data-Lake-blueviolet)
 
 
 
@@ -86,19 +66,12 @@ These technologies represent key components of modern data engineering and analy
 
 
 
-\---
-
-
-
 \## System Architecture
 
 
 
 The system follows a modern multi-layer data architecture where different storage technologies handle different workloads.
 
-
-
-```
 
 +---------------------+
 | Raw Datasets        |
@@ -150,9 +123,6 @@ The system follows a modern multi-layer data architecture where different storag
 | Large Scale Data    |
 +---------------------+
 
-```
-
-\---
 
 
 
