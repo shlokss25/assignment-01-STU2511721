@@ -2,17 +2,23 @@
 
 
 
-!\[Python](https://img.shields.io/badge/Python-Data%20Processing-blue)
 
-!\[SQL](https://img.shields.io/badge/SQL-Database-green)
 
-!\[MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen)
 
-!\[Data Warehouse](https://img.shields.io/badge/Data-Warehouse-orange)
 
-!\[Vector DB](https://img.shields.io/badge/Vector-Database-purple)
 
-!\[Data Lake](https://img.shields.io/badge/Data-Lake-blueviolet)
+
+
+
+!\[Python](https://img.shields.io/badge/Python-Data%20Processing-blue) !\[SQL](https://img.shields.io/badge/SQL-Database-green) !\[MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen) !\[Data Warehouse](https://img.shields.io/badge/Data-Warehouse-orange) !\[Vector DB](https://img.shields.io/badge/Vector-Database-purple) !\[Data Lake](https://img.shields.io/badge/Data-Lake-blueviolet)
+
+
+
+
+
+
+
+
 
 
 
