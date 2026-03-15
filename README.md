@@ -101,71 +101,53 @@ The system follows a modern multi-layer data architecture where different storag
 ```
 
 +---------------------+
-
 | Raw Datasets        |
-
 | (CSV / JSON / Parquet)
-
 +----------+----------+
 
-&#x20;          |
+          |
 
-&#x20;          v
+          v
 
 +---------------------+
-
 | Relational Database |
-
 | (SQL)               |
-
 +----------+----------+
 
-&#x20;          |
+          |
 
-&#x20;          v
+          v
 
 +---------------------+
-
 | NoSQL Database      |
-
 | (MongoDB)           |
-
 +----------+----------+
 
-&#x20;          |
+           |
 
-&#x20;          v
+           v
 
 +---------------------+
-
 | Data Warehouse      |
-
 | (Star Schema)       |
-
 +----------+----------+
 
-&#x20;          |
+          |
 
-&#x20;          v
+          v
 
 +---------------------+
-
 | Vector Database     |
-
 | (Similarity Search) |
-
 +----------+----------+
 
-&#x20;          |
+         |
 
-&#x20;          v
+         v
 
 +---------------------+
-
 | Data Lake           |
-
 | Large Scale Data    |
-
 +---------------------+
 
 ```
