@@ -66,64 +66,43 @@ These technologies represent key components of modern data engineering and analy
 
 
 
-\## System Architecture
-
-
+## System Architecture
 
 The system follows a modern multi-layer data architecture where different storage technologies handle different workloads.
-
-
-+---------------------+
-| Raw Datasets        |
-| (CSV / JSON / Parquet)
-+----------+----------+
-
-          |
-
-          v
-
-+---------------------+
-| Relational Database |
-| (SQL)               |
-+----------+----------+
-
-          |
-
-          v
-
-+---------------------+
-| NoSQL Database      |
-| (MongoDB)           |
-+----------+----------+
-
-           |
-
-           v
-
-+---------------------+
-| Data Warehouse      |
-| (Star Schema)       |
-+----------+----------+
-
-          |
-
-          v
-
-+---------------------+
-| Vector Database     |
-| (Similarity Search) |
-+----------+----------+
-
-         |
-
-         v
-
-+---------------------+
-| Data Lake           |
-| Large Scale Data    |
-+---------------------+
-
-
++---------------------------+
+| Raw Datasets              |
+| (CSV / JSON / Parquet)    |
++------------+--------------+
+|
+v
++---------------------------+
+| Relational Database       |
+| (SQL)                     |
++------------+--------------+
+|
+v
++---------------------------+
+| NoSQL Database            |
+| (MongoDB)                 |
++------------+--------------+
+|
+v
++---------------------------+
+| Data Warehouse            |
+| (Star Schema)             |
++------------+--------------+
+|
+v
++---------------------------+
+| Vector Database           |
+| (Similarity Search)       |
++------------+--------------+
+|
+v
++---------------------------+
+| Data Lake                 |
+| Large Scale Data Storage  |
++---------------------------+
 
 
 \## Project Structure
