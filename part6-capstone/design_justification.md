@@ -1,62 +1,16 @@
-\# Part 6 — Capstone Project
+\# Design Justification for Retail Data Architecture
 
 
 
-\## Introduction
+\## Overview
 
 
 
-The objective of this capstone section is to demonstrate how different modern data management technologies can be integrated to build a complete data ecosystem. Throughout this assignment, multiple data storage and processing approaches were explored, including relational databases, NoSQL databases, data warehouses, vector databases, and data lakes.
+This project implements a modern multi-layer data architecture designed to manage and analyze retail transaction data efficiently. The architecture integrates multiple data management technologies, including relational databases, NoSQL systems, data warehouses, vector databases, and data lakes. Each component serves a specific role within the data ecosystem and addresses different data processing requirements.
 
 
 
-Each of these technologies serves a specific purpose within modern data-driven systems. By combining these components, organizations can efficiently store, process, and analyze large volumes of data.
-
-
-
-\---
-
-
-
-\## System Overview
-
-
-
-The project demonstrates a simplified data architecture for managing and analyzing retail order data. The architecture includes multiple layers, each responsible for a specific data management task.
-
-
-
-The components implemented in this assignment include:
-
-
-
-\* \*\*Relational Database (RDBMS)\*\*
-
-&#x20; Used for storing structured transactional data using SQL tables and relationships.
-
-
-
-\* \*\*NoSQL Document Database\*\*
-
-&#x20; Used for flexible storage of JSON-based order documents.
-
-
-
-\* \*\*Data Warehouse\*\*
-
-&#x20; Designed using a star schema to support analytical queries and business intelligence reporting.
-
-
-
-\* \*\*Vector Database\*\*
-
-&#x20; Demonstrates similarity search using vector embeddings to retrieve the most relevant items based on semantic similarity.
-
-
-
-\* \*\*Data Lake\*\*
-
-&#x20; Stores raw data in its original format and enables large-scale data analysis using processing tools such as Python.
+The purpose of this design is to demonstrate how modern data engineering systems combine multiple storage and processing technologies to support both transactional operations and analytical workloads.
 
 
 
@@ -64,27 +18,15 @@ The components implemented in this assignment include:
 
 
 
-\## Data Architecture Flow
+\## Relational Database (SQL)
 
 
 
-The overall data workflow can be described as follows:
+Relational databases are used to store structured transactional data such as customers, products, orders, and order items. SQL-based systems provide strong consistency, structured schema enforcement, and support for complex queries using joins and aggregations.
 
 
 
-1\. Transactional retail data is initially stored in a relational database.
-
-2\. The same data can be stored in a NoSQL document format for flexible querying.
-
-3\. Data is transformed and organized into a star schema within the data warehouse to support analytical queries.
-
-4\. Vector embeddings can be generated from the data to enable semantic similarity search in a vector database.
-
-5\. Raw datasets are stored in a data lake where large-scale processing and analytics can be performed.
-
-
-
-This layered architecture reflects how modern organizations manage data across different storage and processing systems.
+In this project, the relational database layer is responsible for maintaining normalized transactional data. This ensures data integrity and allows efficient querying for operational tasks such as retrieving customer orders or product sales information.
 
 
 
@@ -92,27 +34,91 @@ This layered architecture reflects how modern organizations manage data across d
 
 
 
-\## Key Learnings
+\## NoSQL Database (MongoDB)
 
 
 
-Through this assignment, several important concepts were explored:
+NoSQL document databases such as MongoDB are well suited for handling semi-structured or flexible data formats. Unlike relational systems, document databases store information in JSON-like structures, allowing dynamic schema design and easier handling of hierarchical data.
 
 
 
-\* Designing relational database schemas using SQL
-
-\* Working with document-based NoSQL databases
-
-\* Building analytical data models using star schemas
-
-\* Understanding vector embeddings and similarity search
-
-\* Processing raw data stored in a data lake
+In the retail system, the NoSQL layer stores order information as documents. This structure allows related data to be stored together, reducing the need for complex joins and enabling faster retrieval for certain types of queries.
 
 
 
-These technologies collectively form the foundation of modern data engineering systems.
+\---
+
+
+
+\## Data Warehouse (Star Schema)
+
+
+
+A data warehouse is designed to support analytical queries and reporting. In this project, a star schema model was implemented with a central fact table connected to multiple dimension tables.
+
+
+
+This structure enables efficient aggregation and analysis of retail metrics such as sales performance, customer purchasing patterns, and product popularity. Data warehouses are optimized for read-heavy analytical workloads and form the foundation for business intelligence and reporting systems.
+
+
+
+\---
+
+
+
+\## Vector Database and Similarity Search
+
+
+
+Vector databases store numerical vector representations of data, commonly known as embeddings. These embeddings allow systems to perform similarity searches based on mathematical distance metrics such as cosine similarity.
+
+
+
+In this project, vector representations of product data were used to demonstrate how similarity search can identify related or relevant products. This type of technology is increasingly used in recommendation systems, search engines, and AI-driven applications.
+
+
+
+\---
+
+
+
+\## Data Lake Processing
+
+
+
+A data lake is designed to store large volumes of raw or semi-processed data in its original format. In this project, datasets stored in formats such as CSV, JSON, and Parquet were processed using analytical tools such as DuckDB.
+
+
+
+The data lake layer allows flexible large-scale data analysis without requiring strict schema enforcement. This approach supports exploratory analysis, machine learning workflows, and large-scale data processing tasks.
+
+
+
+\---
+
+
+
+\## Integrated Data Architecture
+
+
+
+The overall system architecture integrates multiple data management layers to support different workloads:
+
+
+
+\* Relational databases manage structured transactional data.
+
+\* NoSQL databases provide flexible document storage.
+
+\* Data warehouses enable large-scale analytical queries.
+
+\* Vector databases support similarity-based search.
+
+\* Data lakes allow scalable raw data storage and processing.
+
+
+
+By combining these technologies, organizations can build scalable and flexible data platforms capable of supporting operational systems, analytics, and advanced data-driven applications.
 
 
 
@@ -124,11 +130,7 @@ These technologies collectively form the foundation of modern data engineering s
 
 
 
-This capstone project demonstrates how multiple data management technologies can work together within a unified data architecture. By combining relational databases, NoSQL systems, data warehouses, vector databases, and data lakes, organizations can build scalable and flexible platforms for managing and analyzing large datasets.
-
-
-
-The implementation of these components provides a practical understanding of modern data engineering concepts and highlights the importance of selecting the appropriate technology for different data processing needs.
+The architecture implemented in this project reflects modern data engineering practices used in industry. Each technology layer was selected based on its strengths and suitability for specific types of data and workloads. Together, these components form a robust and scalable data ecosystem capable of handling diverse data management and analytical requirements.
 
 
 
