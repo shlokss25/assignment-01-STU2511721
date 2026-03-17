@@ -1,108 +1,20 @@
-\# Part 4 — Vector Database
+\## Vector DB Use Case
 
 
 
-\## Introduction
+A traditional keyword-based database search would not be sufficient for a law firm that needs to search through large contracts using natural language queries. Keyword search relies on exact word matches, which means it may fail to retrieve relevant information if the wording in the contract differs from the query. For example, a lawyer searching for “termination clauses” might miss sections that use different terms like “agreement ending conditions” or “contract cancellation terms.” This limitation makes keyword search unreliable for complex legal documents.
 
 
 
-Modern artificial intelligence applications often rely on \*\*vector embeddings\*\* to represent complex data such as text, images, and audio. These embeddings convert data into numerical vectors that capture semantic meaning. Vector databases are designed to store and search these vectors efficiently using similarity search techniques.
+In contrast, a vector database enables semantic search by converting both the contract text and user queries into vector embeddings. These embeddings capture the meaning and context of the text rather than just individual words. As a result, even if the wording is different, the system can still retrieve the most relevant sections based on similarity in meaning.
 
 
 
-In this part of the assignment, a simple simulation of vector similarity search was implemented to demonstrate the core concept behind vector databases.
+In this system, the contracts would first be broken into smaller chunks and converted into embeddings. When a lawyer enters a query in plain English, it is also converted into a vector. The vector database then performs similarity search to find the closest matching sections of the contract.
 
 
 
-\---
-
-
-
-\## Vector Embeddings
-
-
-
-A vector embedding is a numerical representation of data in multi-dimensional space. Each object is represented as a vector containing several numerical values.
-
-
-
-For example:
-
-
-
-\* Product descriptions
-
-\* Customer reviews
-
-\* Images
-
-\* Text documents
-
-
-
-can all be converted into vector representations.
-
-
-
-These vectors allow machines to compare the similarity between different items.
-
-
-
-\---
-
-
-
-\## Similarity Search
-
-
-
-Vector databases perform \*\*similarity search\*\* to identify items that are closest to a given query vector.
-
-
-
-In this implementation:
-
-
-
-1\. Product data was represented using simulated vector embeddings.
-
-2\. A query vector was defined to represent a search request.
-
-3\. Cosine similarity was used to calculate how similar each product vector is to the query vector.
-
-4\. The product with the highest similarity score was identified as the most relevant result.
-
-
-
-\---
-
-
-
-\## Cosine Similarity
-
-
-
-Cosine similarity is one of the most common techniques used in vector search. It measures the cosine of the angle between two vectors.
-
-
-
-Values closer to \*\*1\*\* indicate higher similarity, while values closer to \*\*0\*\* indicate lower similarity.
-
-
-
-This method is widely used in recommendation systems, semantic search engines, and modern AI applications.
-
-
-
-\---
-
-
-
-\## Conclusion
-
-
-
-This section demonstrates the fundamental concept behind vector databases by implementing a basic vector similarity search algorithm. By representing data as embeddings and comparing vectors using cosine similarity, it becomes possible to efficiently retrieve the most relevant items from large datasets.
+Therefore, a vector database plays a critical role in enabling accurate, context-aware search, making it far more effective than traditional keyword-based approaches for legal document analysis.
 
 
 
