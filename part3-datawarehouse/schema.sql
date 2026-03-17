@@ -1,6 +1,7 @@
 /*
 Part 3 — Data Warehouse Star Schema
 This schema organizes retail order data for analytical queries.
+It follows a proper star schema with correct granularity.
 */
 
 
@@ -27,13 +28,16 @@ CREATE TABLE DimProduct (
 
 -- --------------------------------------------------
 -- Dimension Table: Date
+-- (Enhanced for better analytics)
 -- --------------------------------------------------
 
 CREATE TABLE DimDate (
     date_id DATE PRIMARY KEY,
     year INT,
     month INT,
-    day INT
+    day INT,
+    quarter INT,              -- Optional Upgrade
+    weekday VARCHAR(10)       -- Optional Upgrade
 );
 
 
@@ -48,11 +52,13 @@ CREATE TABLE DimStatus (
 
 
 -- --------------------------------------------------
--- Fact Table: Orders
+-- Fact Table: Order Items (Correct Granularity)
+-- Each row represents ONE product in ONE order
 -- --------------------------------------------------
 
-CREATE TABLE FactOrders (
-    order_id VARCHAR(20) PRIMARY KEY,
+CREATE TABLE FactOrderItems (
+    order_item_id INT PRIMARY KEY,
+    order_id VARCHAR(20),
     customer_id VARCHAR(20),
     product_id VARCHAR(20),
     date_id DATE,
