@@ -1,20 +1,14 @@
 /*
-Part 2 — NoSQL (MongoDB Queries)
-
-This file demonstrates MongoDB operations on the orders collection
-using a document-oriented database model.
+Part 2 — MongoDB Queries
+Basic operations performed on orders collection
 */
 
-
-// --------------------------------------------------
-// 1. Insert Order Documents
-// --------------------------------------------------
-
+// inserting sample orders
 db.orders.insertMany([
   {
     order_id: "ORD2001",
     customer_id: "CUST028",
-    order_date: "2023-05-20",
+    order_date: new Date("2023-05-20"),
     status: "delivered",
     total_amount: 2397,
     num_items: 1
@@ -22,80 +16,51 @@ db.orders.insertMany([
   {
     order_id: "ORD2002",
     customer_id: "CUST015",
-    order_date: "2023-05-21",
+    order_date: new Date("2023-05-21"),
     status: "pending",
     total_amount: 1200,
     num_items: 2
+  },
+  {
+    order_id: "ORD2003",
+    customer_id: "CUST028",
+    order_date: new Date("2023-05-22"),
+    status: "cancelled",
+    total_amount: 800,
+    num_items: 1
   }
 ]);
 
 
-// --------------------------------------------------
-// 2. Retrieve All Orders
-// --------------------------------------------------
-
+// get all orders
 db.orders.find();
 
-
-// --------------------------------------------------
-// 3. Retrieve Delivered Orders
-// --------------------------------------------------
-
+// only delivered orders
 db.orders.find({ status: "delivered" });
 
-
-// --------------------------------------------------
-// 4. Find Orders With Total Amount Greater Than 1000
-// --------------------------------------------------
-
+// orders with amount > 1000
 db.orders.find({ total_amount: { $gt: 1000 } });
 
-
-// --------------------------------------------------
-// 5. Find Orders Placed By A Specific Customer
-// --------------------------------------------------
-
+// orders for a specific customer
 db.orders.find({ customer_id: "CUST028" });
 
-
-// --------------------------------------------------
-// 6. Sort Orders By Total Amount (Descending)
-// --------------------------------------------------
-
+// sort by total amount (high to low)
 db.orders.find().sort({ total_amount: -1 });
 
+// projection example (only show few fields)
+db.orders.find({}, { order_id: 1, total_amount: 1, _id: 0 });
 
-// --------------------------------------------------
-// 7. Projection (Show Only Selected Fields)
-// --------------------------------------------------
-
-db.orders.find(
-  {},
-  { order_id: 1, total_amount: 1, _id: 0 }
-);
-
-
-// --------------------------------------------------
-// 8. Update Order Status
-// --------------------------------------------------
-
+// update status of one order
 db.orders.updateOne(
   { order_id: "ORD2002" },
   { $set: { status: "delivered" } }
 );
 
-
-// --------------------------------------------------
-// 9. Delete an Order
-// --------------------------------------------------
-
-db.orders.deleteOne({ order_id: "ORD2002" });
+// delete an order
+db.orders.deleteOne({ order_id: "ORD2003" });
 
 
-// --------------------------------------------------
-// 10. Aggregation: Total Revenue
-// --------------------------------------------------
-
+// total revenue
 db.orders.aggregate([
   {
     $group: {
@@ -105,11 +70,7 @@ db.orders.aggregate([
   }
 ]);
 
-
-// --------------------------------------------------
-// 11. Aggregation: Revenue by Status
-// --------------------------------------------------
-
+// revenue grouped by status
 db.orders.aggregate([
   {
     $group: {
