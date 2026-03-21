@@ -1,19 +1,18 @@
 ## ETL Decisions
 
-### Decision 1 — Standardizing Date Formats
+### Decision 1 — Standardizing Date Formats  
+Problem: The dataset had different date formats like DD-MM-YYYY, MM/DD/YYYY, and some incomplete values. This made it difficult to join with the date table and perform time-based analysis properly.  
 
-Problem: The raw dataset contained inconsistent date formats such as `DD-MM-YYYY`, `MM/DD/YYYY`, and some incomplete values. This created issues while joining with the date dimension and performing time-based analysis.
+Resolution: All dates were converted into a single format (YYYY-MM-DD) before loading into the dim_date table. Invalid or incomplete dates were removed if they couldn’t be fixed. This helped in getting correct results for monthly and yearly analysis.
 
-Resolution: All date values were converted into a standardized `YYYY-MM-DD` format before loading into the `dim_date` table. Invalid or incomplete dates were either corrected where possible or removed to maintain consistency. This ensured smooth joins and accurate month-wise and year-wise analysis.
 
-### Decision 2 — Handling Missing and NULL Values
+### Decision 2 — Handling Missing and NULL Values  
+Problem: Some fields had missing or NULL values, especially in columns like category, quantity, and total amount. This could affect calculations and give incorrect results.  
 
-Problem: Some records in the dataset had NULL or missing values in important fields such as product category, total amount, and quantity. These missing values could lead to incorrect aggregations and unreliable insights.
+Resolution: For numerical fields like quantity and total amount, I either filled reasonable default values or ignored those records if the data was not usable. For categorical fields, I assigned standard values where possible. This made the dataset cleaner and more reliable for analysis.
 
-Resolution: Missing numerical values like quantity and total amount were either filled using logical defaults or excluded if they were not recoverable. For categorical fields like product category, standardized default values were assigned where appropriate. This ensured that the dataset remained consistent and suitable for analytical queries.
 
-### Decision 3 — Standardizing Category Naming
+### Decision 3 — Standardizing Category Naming  
+Problem: The category column had inconsistent naming like “electronics”, “Electronics”, and “ELECTRONICS”. This caused issues during grouping because they were treated as different values.  
 
-Problem: The product category field had inconsistent casing and naming variations such as “electronics”, “Electronics”, and “ELECTRONICS”. This would result in incorrect grouping during analysis, leading to fragmented results.
-
-Resolution: All category values were standardized to a consistent format (e.g., “Electronics”, “Fashion”). This was done during the transformation stage before loading into the `dim_product` table. As a result, aggregation queries now produce accurate and meaningful category-level insights.
+Resolution: All category values were converted into a consistent format (for example, “Electronics”, “Fashion”) before loading into the dim_product table. This ensured that aggregation queries produced correct and meaningful results.
