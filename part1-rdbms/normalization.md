@@ -1,32 +1,36 @@
-\## Normalized Database Schema (3NF)
+\# Part 1 — Relational Database (RDBMS)
 
 
 
-To resolve these anomalies, the dataset was normalized into four relational tables:
+This part focuses on converting a flat dataset (orders\_flat.csv) into a normalized relational database.
 
 
 
-\* \*\*Customers\*\* – Stores customer information (Primary Key: customer\_id)
+The data was split into multiple tables:
 
-\* \*\*Products\*\* – Stores product details and pricing (Primary Key: product\_id)
+\- Customers
 
-\* \*\*Orders\*\* – Records customer orders (Primary Key: order\_id, Foreign Key: customer\_id)
+\- Products
 
-\* \*\*Order\_Items\*\* – Stores individual items within each order (Foreign Keys: order\_id, product\_id)
+\- Orders
 
-
-
-This structure follows the principles of \*\*Third Normal Form (3NF)\*\*, which requires that:
+\- Order\_Items
 
 
 
-1\. The table is in Second Normal Form (2NF)
-
-2\. All non-key attributes are fully functionally dependent on the primary key
-
-3\. There are no transitive dependencies between non-key attributes
+This helps remove redundancy and improves data consistency.
 
 
 
-By enforcing primary and foreign key relationships, the schema ensures referential integrity and eliminates redundancy.
+Basic SQL queries were written to:
+
+\- retrieve customer orders
+
+\- analyze product sales
+
+\- join multiple tables
+
+
+
+The design follows normalization principles and ensures efficient data storage.
 
