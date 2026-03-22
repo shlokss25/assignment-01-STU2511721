@@ -1,4 +1,4 @@
-Data Management Systems — Assignment 01
+Data Management Systems — Assignment 02
 Student ID: STU2511721
 ![SQL](https://img.shields.io/badge/SQL-RDBMS-blue)
 ![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen)
