@@ -1,61 +1,181 @@
-/*
-Part 2 — MongoDB (based on orders.json)
-*/
+// ============================================================
+// Part 2 — MongoDB Operations
+// ============================================================
 
-// insert sample documents
-db.orders.insertMany([
+// Select database
+use("ecommerce_catalog");
+
+// --------------------------------------------------------
+// OP1: insertMany() — insert all 3 documents from sample_documents.json
+// --------------------------------------------------------
+db.products.insertMany([
   {
-    order_id: "ORD1001",
-    customer_id: "CUST001",
-    order_date: new Date("2023-05-10"),
-    status: "delivered",
-    total_amount: 2500,
-    items: [
-      { product: "Shoes", quantity: 1, price: 2500 }
-    ]
+    _id: "prod_elec_001",
+    category: "Electronics",
+    name: "Samsung 65-inch QLED TV",
+    brand: "Samsung",
+    model_number: "QA65Q80CAKLXL",
+    price: 89999,
+    currency: "INR",
+    in_stock: true,
+    stock_qty: 12,
+    specifications: {
+      display_type: "QLED",
+      screen_size_inches: 65,
+      resolution: "4K UHD (3840x2160)",
+      refresh_rate_hz: 120,
+      hdr_support: ["HDR10+", "HLG"],
+      smart_tv: true,
+      operating_system: "Tizen OS 7.0",
+      ports: { hdmi: 4, usb: 3, optical_audio: 1, ethernet: 1 },
+      voltage: "AC 100-240V, 50/60Hz",
+      power_consumption_watts: 150
+    },
+    warranty: {
+      duration_years: 1,
+      type: "Comprehensive",
+      includes_panel: true,
+      service_type: "On-site"
+    },
+    tags: ["4K", "smart-tv", "QLED", "Samsung"],
+    ratings: { average: 4.4, count: 2310 },
+    created_at: new Date("2024-01-15T10:00:00Z")
   },
   {
-    order_id: "ORD1002",
-    customer_id: "CUST002",
-    order_date: new Date("2023-05-11"),
-    status: "pending",
-    total_amount: 4500,
-    items: [
-      { product: "Phone", quantity: 1, price: 4500 }
-    ]
+    _id: "prod_clth_001",
+    category: "Clothing",
+    name: "Men's Slim Fit Formal Shirt",
+    brand: "Van Heusen",
+    sku: "VH-MSFSH-BLU-42",
+    price: 1599,
+    currency: "INR",
+    in_stock: true,
+    stock_qty: 85,
+    attributes: {
+      gender: "Men",
+      fit_type: "Slim Fit",
+      fabric: "100% Cotton",
+      fabric_weight_gsm: 130,
+      care_instructions: ["Machine Wash Cold", "Do Not Bleach", "Tumble Dry Low"],
+      collar_type: "Spread Collar",
+      sleeve_type: "Full Sleeve"
+    },
+    available_sizes: ["38", "40", "42", "44", "46"],
+    available_colors: [
+      { color_name: "Sky Blue",   hex_code: "#87CEEB", stock_qty: 30 },
+      { color_name: "White",      hex_code: "#FFFFFF", stock_qty: 35 },
+      { color_name: "Light Grey", hex_code: "#D3D3D3", stock_qty: 20 }
+    ],
+    country_of_origin: "India",
+    ratings: { average: 4.1, count: 870 },
+    created_at: new Date("2024-02-10T08:30:00Z")
+  },
+  {
+    _id: "prod_groc_001",
+    category: "Groceries",
+    name: "Organic Whole Wheat Flour (Atta)",
+    brand: "Aashirvaad",
+    barcode: "8901030861207",
+    price: 325,
+    currency: "INR",
+    in_stock: true,
+    stock_qty: 200,
+    packaging: {
+      weight_kg: 5,
+      type: "Sealed Pouch",
+      recyclable: true
+    },
+    shelf_life: {
+      manufactured_date: "2024-10-01",
+      expiry_date: "2025-04-01",
+      shelf_life_months: 6
+    },
+    nutritional_info_per_100g: {
+      energy_kcal: 341,
+      protein_g: 12.5,
+      carbohydrates_g: 69.4,
+      dietary_fibre_g: 11.2,
+      total_fat_g: 1.7,
+      saturated_fat_g: 0.3,
+      sodium_mg: 2
+    },
+    certifications: ["FSSAI Licensed", "ISO 22000:2018", "Organic India Certified"],
+    allergens: ["Wheat", "Gluten"],
+    storage_instructions: "Store in a cool, dry place. Once opened, use airtight container.",
+    country_of_origin: "India",
+    fssai_license: "10013022002253",
+    ratings: { average: 4.6, count: 15820 },
+    created_at: new Date("2024-10-05T06:00:00Z")
   }
 ]);
 
-// get all orders
-db.orders.find();
-
-// delivered orders
-db.orders.find({ status: "delivered" });
-
-// high value orders
-db.orders.find({ total_amount: { $gt: 3000 } });
-
-// orders for a customer
-db.orders.find({ customer_id: "CUST001" });
-
-// sort by amount
-db.orders.find().sort({ total_amount: -1 });
-
-// update status
-db.orders.updateOne(
-  { order_id: "ORD1002" },
-  { $set: { status: "delivered" } }
+// --------------------------------------------------------
+// OP2: find() — retrieve all Electronics products with price > 20000
+// --------------------------------------------------------
+db.products.find(
+  {
+    category: "Electronics",
+    price: { $gt: 20000 }
+  },
+  {
+    _id: 1,
+    name: 1,
+    brand: 1,
+    price: 1,
+    "warranty.duration_years": 1
+  }
 );
 
-// delete example
-db.orders.deleteOne({ order_id: "ORD1002" });
-
-// total revenue
-db.orders.aggregate([
+// --------------------------------------------------------
+// OP3: find() — retrieve all Groceries expiring before 2025-01-01
+// --------------------------------------------------------
+db.products.find(
   {
-    $group: {
-      _id: null,
-      total: { $sum: "$total_amount" }
+    category: "Groceries",
+    "shelf_life.expiry_date": { $lt: "2025-01-01" }
+  },
+  {
+    _id: 1,
+    name: 1,
+    brand: 1,
+    "shelf_life.expiry_date": 1,
+    price: 1
+  }
+);
+
+// --------------------------------------------------------
+// OP4: updateOne() — add a "discount_percent" field to a specific product
+// Adds 10% discount to the Samsung QLED TV (prod_elec_001)
+// --------------------------------------------------------
+db.products.updateOne(
+  { _id: "prod_elec_001" },
+  {
+    $set: {
+      discount_percent: 10,
+      discounted_price: 80999.10,
+      discount_valid_until: "2025-03-31"
     }
   }
-]);
+);
+
+// --------------------------------------------------------
+// OP5: createIndex() — create an index on category field
+// WHY: The two most common query patterns in a product catalog are:
+//   (a) "show me all Electronics products"  — category filter
+//   (b) "Electronics with price > X"        — category + range filter
+// Without this index, MongoDB performs a full collection scan (COLLSCAN)
+// on every category-filtered query. With the index, MongoDB performs
+// an IXSCAN, reducing query time from O(n) to O(log n) for large catalogs.
+// A compound index (category + price) would serve both query patterns.
+// --------------------------------------------------------
+db.products.createIndex(
+  { category: 1, price: 1 },
+  {
+    name: "idx_category_price",
+    background: true,
+    comment: "Supports category-filter and category+price range queries"
+  }
+);
+
+// Verify the index was created
+db.products.getIndexes();
