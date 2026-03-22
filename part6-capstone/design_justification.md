@@ -1,48 +1,36 @@
-\# Design Justification for Retail Data Architecture
+\# Part 6 — Capstone Design Justification
 
 
 
-\## Overview
+\## Storage Systems
 
 
 
-This project implements a modern multi-layer data architecture designed to manage and analyze retail transaction data efficiently. The architecture integrates multiple data management technologies, including relational databases, NoSQL systems, data warehouses, vector databases, and data lakes. Each component serves a specific role within the data ecosystem and addresses different data processing requirements.
+The hospital network has four distinct goals, each with different data access patterns, latency requirements, and data types. No single storage system is optimal for all four; a purpose-built hybrid architecture is required.
 
 
 
-The purpose of this design is to demonstrate how modern data engineering systems combine multiple storage and processing technologies to support both transactional operations and analytical workloads.
+\*\*Goal 1 — Predict patient readmission risk (ML on historical treatment data)\*\*  
+
+This workload is analytical and batch-oriented. Historical treatment records — diagnoses, procedures, medications, lab results, discharge summaries — are structured and semi-structured. The recommended storage system is a \*\*Data Lakehouse\*\* (e.g., Apache Iceberg on cloud object storage such as AWS S3, with a Spark or Databricks compute layer). The Lakehouse maintains a Bronze layer of raw EHR exports, a Silver layer of cleaned and joined feature tables, and a Gold layer of ML-ready feature vectors. Apache Iceberg provides ACID transactions, schema evolution, and time-travel — all necessary for reproducible model training across hospital system upgrades. The trained model artefacts are stored in an \*\*ML model registry\*\* (MLflow or SageMaker Model Registry).
 
 
 
-\---
+\*\*Goal 2 — Allow doctors to query patient history in plain English (RAG system)\*\*  
+
+This is a semantic search workload over unstructured clinical notes, discharge summaries, and medical reports. The recommended system is a \*\*Vector Database\*\* (e.g., Pinecone, Weaviate, or pgvector on PostgreSQL). Clinical documents are chunked, embedded using a medical language model (Bio-ClinicalBERT or MedPaLM), and stored as dense vectors. At query time, the doctor's natural language question is embedded and the top-k semantically similar document chunks are retrieved, then synthesised by an LLM (Retrieval-Augmented Generation). The source documents live in the Data Lake; the vector index is a derived, queryable layer on top.
 
 
 
-\## Relational Database (SQL)
+\*\*Goal 3 — Generate monthly management reports (bed occupancy, department-wise costs)\*\*  
+
+This is a classic OLAP workload requiring aggregation over structured, historical data. The recommended system is a \*\*Data Warehouse\*\* (e.g., Google BigQuery, Amazon Redshift, or Snowflake). The warehouse houses a star schema: a central `fact\_admissions` table with foreign keys to `dim\_department`, `dim\_ward`, `dim\_date`, and `dim\_procedure`. Monthly reports run as SQL queries with GROUP BY aggregations. The warehouse is populated nightly via an ETL pipeline from the operational OLTP database (see Goal 4 below).
 
 
 
-Relational databases are used to store structured transactional data such as customers, products, orders, and order items. SQL-based systems provide strong consistency, structured schema enforcement, and support for complex queries using joins and aggregations.
+\*\*Goal 4 — Stream and store real-time ICU vitals\*\*  
 
-
-
-In this project, the relational database layer is responsible for maintaining normalized transactional data. This ensures data integrity and allows efficient querying for operational tasks such as retrieving customer orders or product sales information.
-
-
-
-\---
-
-
-
-\## NoSQL Database (MongoDB)
-
-
-
-NoSQL document databases such as MongoDB are well suited for handling semi-structured or flexible data formats. Unlike relational systems, document databases store information in JSON-like structures, allowing dynamic schema design and easier handling of hierarchical data.
-
-
-
-In the retail system, the NoSQL layer stores order information as documents. This structure allows related data to be stored together, reducing the need for complex joins and enabling faster retrieval for certain types of queries.
+This is a high-velocity, time-series streaming workload. ICU monitors emit continuous readings (heart rate, SpO2, blood pressure, temperature) at sub-second intervals for every patient. The recommended system is a \*\*Time-Series Database\*\* (e.g., InfluxDB or TimescaleDB), fed by a streaming ingestion pipeline (Apache Kafka or AWS Kinesis). Kafka absorbs the real-time stream, decouples producers (ICU devices) from consumers (alerting systems, dashboards), and delivers data to both the time-series DB for real-time monitoring and the Data Lake for long-term storage and retrospective analysis.
 
 
 
@@ -50,31 +38,19 @@ In the retail system, the NoSQL layer stores order information as documents. Thi
 
 
 
-\## Data Warehouse (Star Schema)
+\## OLTP vs OLAP Boundary
 
 
 
-A data warehouse is designed to support analytical queries and reporting. In this project, a star schema model was implemented with a central fact table connected to multiple dimension tables.
+The \*\*OLTP boundary\*\* is the operational Electronic Health Record (EHR) system — a relational database (PostgreSQL or MySQL) that handles day-to-day clinical transactions: registering admissions, recording prescriptions, updating vitals flags, scheduling procedures, processing insurance claims. This system is optimised for concurrent write throughput, low-latency single-record lookups, and strict ACID compliance. It serves nurses, doctors, and the billing department in real time.
 
 
 
-This structure enables efficient aggregation and analysis of retail metrics such as sales performance, customer purchasing patterns, and product popularity. Data warehouses are optimized for read-heavy analytical workloads and form the foundation for business intelligence and reporting systems.
+The \*\*OLAP boundary begins at the ETL/ELT pipeline\*\* that extracts data from the EHR (and from Kafka for streaming vitals) and loads it into the Data Warehouse and Data Lake. This boundary is typically implemented as a nightly batch job (for historical reporting) supplemented by a micro-batch or streaming pipeline (for near-real-time dashboards). The Data Warehouse's star schema is read-only from the reporting perspective — hospital management and BI analysts query it with no write contention against the operational system.
 
 
 
-\---
-
-
-
-\## Vector Database and Similarity Search
-
-
-
-Vector databases store numerical vector representations of data, commonly known as embeddings. These embeddings allow systems to perform similarity searches based on mathematical distance metrics such as cosine similarity.
-
-
-
-In this project, vector representations of product data were used to demonstrate how similarity search can identify related or relevant products. This type of technology is increasingly used in recommendation systems, search engines, and AI-driven applications.
+The dividing line is clear: \*\*writes go to OLTP (EHR + Kafka); reads-for-analysis go to OLAP (Warehouse + Lakehouse)\*\*. The Kafka stream bridges the two for the ICU vitals goal, acting as the boundary where real-time data transitions from operational to analytical.
 
 
 
@@ -82,55 +58,29 @@ In this project, vector representations of product data were used to demonstrate
 
 
 
-\## Data Lake Processing
+\## Trade-offs
 
 
 
-A data lake is designed to store large volumes of raw or semi-processed data in its original format. In this project, datasets stored in formats such as CSV, JSON, and Parquet were processed using analytical tools such as DuckDB.
+\*\*Identified Trade-off: Complexity and Operational Overhead of a Multi-System Architecture\*\*
 
 
 
-The data lake layer allows flexible large-scale data analysis without requiring strict schema enforcement. This approach supports exploratory analysis, machine learning workflows, and large-scale data processing tasks.
+The architecture proposed — EHR (PostgreSQL), Kafka, Data Lakehouse, Data Warehouse, Vector Database, Time-Series Database, and ML model registry — is powerful but introduces significant operational complexity. Each system requires separate infrastructure provisioning, monitoring, security patching, backup policies, and team expertise. A small hospital IT team may struggle to maintain six distinct storage systems simultaneously.
 
 
 
-\---
+\*\*Mitigation Strategy:\*\*  
+
+The primary mitigation is to adopt a \*\*managed cloud-native stack\*\* that reduces operational burden to configuration rather than infrastructure management. For example, on AWS: Amazon RDS (EHR), Amazon MSK (Managed Kafka), AWS Glue + S3 + Iceberg (Lakehouse), Amazon Redshift (Warehouse), Amazon OpenSearch with vector support (or pgvector on RDS), and Amazon Timestream (time-series). All services offer automated backups, scaling, and SLA-backed uptime without the hospital maintaining bare-metal infrastructure.
 
 
 
-\## Integrated Data Architecture
+A secondary mitigation is \*\*phased implementation\*\*: start with the EHR (Goal 4 operational), then add the Warehouse for reporting (Goal 3), then layer the Lakehouse for ML (Goal 1), and finally add the Vector DB for NLP queries (Goal 2). This staggers the complexity curve and allows the team to build expertise incrementally rather than launching all six systems simultaneously.
 
 
 
-The overall system architecture integrates multiple data management layers to support different workloads:
-
-
-
-\* Relational databases manage structured transactional data.
-
-\* NoSQL databases provide flexible document storage.
-
-\* Data warehouses enable large-scale analytical queries.
-
-\* Vector databases support similarity-based search.
-
-\* Data lakes allow scalable raw data storage and processing.
-
-
-
-By combining these technologies, organizations can build scalable and flexible data platforms capable of supporting operational systems, analytics, and advanced data-driven applications.
-
-
-
-\---
-
-
-
-\## Conclusion
-
-
-
-The architecture implemented in this project reflects modern data engineering practices used in industry. Each technology layer was selected based on its strengths and suitability for specific types of data and workloads. Together, these components form a robust and scalable data ecosystem capable of handling diverse data management and analytical requirements.
+A tertiary mitigation is \*\*consolidation where possible\*\*: PostgreSQL with the TimescaleDB extension can serve both the EHR (OLTP) and the time-series vitals store, reducing the total number of distinct systems from six to five until scale demands separation. Similarly, pgvector adds vector similarity search to the existing PostgreSQL instance without requiring a separate vector database deployment until query volume justifies it.
 
 
 
